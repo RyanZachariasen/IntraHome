@@ -1,4 +1,5 @@
 from ollama import chat
+import json
 
 SCHEMA_EXAMPLE = {
     "vendor": "string or null",
@@ -72,3 +73,19 @@ for chunk in stream:
   
 
 print() 
+
+chunks = []
+for chunk in stream:
+    piece = chunk.message.content
+    print(piece, end='', flush=True)
+    chunks.append(piece)
+
+print()
+
+raw_output = "".join(chunks)
+
+try:
+    receipt_data = json.loads(raw_output)
+except json.JSONDecodeError as e:
+    print(f"Model did not return valid JSON: {e}")
+    receipt_data = None
