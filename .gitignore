@@ -10,3 +10,7 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Spike data: real receipts and model outputs (real financial data)
+ai_exploration/data/receipts/
+ai_exploration/runs/
