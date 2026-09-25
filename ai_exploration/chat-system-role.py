@@ -68,12 +68,6 @@ stream = chat(
     stream=True,
 )
 
-for chunk in stream:
-   print(chunk.message.content, end='', flush=True)
-  
-
-print() 
-
 chunks = []
 for chunk in stream:
     piece = chunk.message.content
