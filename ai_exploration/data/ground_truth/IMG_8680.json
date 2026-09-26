@@ -1,0 +1,38 @@
+{
+  "vendor": "Kvickly",
+  "line_items": [
+    {
+      "raw_text": "TOILETPAPIR",
+      "kind": "item",
+      "name": "toiletpapir",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 20.0,
+      "category": "household"
+    },
+    {
+      "raw_text": "MANDLER 400 G",
+      "kind": "item",
+      "name": "mandler 400 g",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 45.95,
+      "category": "pantry"
+    },
+    {
+      "raw_text": "RABAT",
+      "kind": "discount",
+      "name": "RABAT",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": -3.95,
+      "category": "other"
+    }
+  ],
+  "subtotal": null,
+  "discount": 3.95,
+  "moms": 12.4,
+  "total": 62.0,
+  "payment_method": "card",
+  "uncertain_fields": []
+}

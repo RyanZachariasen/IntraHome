@@ -1,0 +1,119 @@
+{
+  "vendor": "Netto",
+  "line_items": [
+    {
+      "raw_text": "EGELYKKE NATUREL 1KG",
+      "kind": "item",
+      "name": "Egelykke naturel 1 kg",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 19.95,
+      "category": "dairy"
+    },
+    {
+      "raw_text": "MINI PEBER 150 G",
+      "kind": "item",
+      "name": "mini peber 150 g",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 13.0,
+      "category": "produce"
+    },
+    {
+      "raw_text": "GM SOLSIKKERUGBRØD",
+      "kind": "item",
+      "name": "GM solsikkerugbrød",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 4.0,
+      "category": "bakery"
+    },
+    {
+      "raw_text": "ØKO BANAN 4STK",
+      "kind": "item",
+      "name": "økologisk banan 4 stk",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 10.0,
+      "category": "produce"
+    },
+    {
+      "raw_text": "FOCACCIA SKINKE OST",
+      "kind": "item",
+      "name": "focaccia skinke ost",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 12.0,
+      "category": "bakery"
+    },
+    {
+      "raw_text": "Aftenrabat",
+      "kind": "discount",
+      "name": "Aftenrabat",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": -6.0,
+      "category": "other"
+    },
+    {
+      "raw_text": "PIZZASNEGL TOMAT OST",
+      "kind": "item",
+      "name": "pizzasnegl tomat ost",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 12.0,
+      "category": "bakery"
+    },
+    {
+      "raw_text": "Aftenrabat",
+      "kind": "discount",
+      "name": "Aftenrabat",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": -6.0,
+      "category": "other"
+    },
+    {
+      "raw_text": "BERLINER M/ HINDBÆR",
+      "kind": "item",
+      "name": "berliner med hindbær",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 7.0,
+      "category": "bakery"
+    },
+    {
+      "raw_text": "Aftenrabat",
+      "kind": "discount",
+      "name": "Aftenrabat",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": -3.5,
+      "category": "other"
+    },
+    {
+      "raw_text": "DONUT M/KAKAO",
+      "kind": "item",
+      "name": "donut med kakao",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": 7.0,
+      "category": "bakery"
+    },
+    {
+      "raw_text": "Aftenrabat",
+      "kind": "discount",
+      "name": "Aftenrabat",
+      "quantity": 1,
+      "unit_price": null,
+      "total_price": -3.5,
+      "category": "other"
+    }
+  ],
+  "subtotal": null,
+  "discount": null,
+  "moms": 13.19,
+  "total": 65.95,
+  "payment_method": "card",
+  "uncertain_fields": []
+}
