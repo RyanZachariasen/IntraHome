@@ -4,8 +4,9 @@ from pathlib import Path
 
 from ollama import chat
 
+from core.schema import Receipt
 from extractors import Result
-from prompts import build_system_prompt
+from extractors.prompts import build_system_prompt
 
 MODEL = 'qwen3-vl:2b-instruct'
 OPTIONS = {
@@ -30,6 +31,8 @@ def extract(image_path: Path) -> Result:
                 'images': [str(image_path)],
             },
         ],
+        # Constrained decoding: output can only match the Receipt JSON Schema.
+        format=Receipt.model_json_schema(),
         options=OPTIONS,
         stream=True,
     )

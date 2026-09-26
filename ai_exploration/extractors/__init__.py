@@ -1,3 +1,9 @@
+"""Extractors: receipt image in, raw receipt JSON out.
+
+Each module in this package exposes
+    extract(image_path: Path) -> Result
+LLM-based extractors share the prompt in extractors/prompts.py.
+"""
 from dataclasses import dataclass, field
 from pathlib import Path
 
