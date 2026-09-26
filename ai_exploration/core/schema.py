@@ -38,13 +38,11 @@ SCHEMA_EXAMPLE = {
             "raw_text": "string, the line copied exactly as printed, including abbreviations",
             "kind": f"exactly one of: {' | '.join(LINE_KINDS)}",
             "name": "string, expanded item name in Danish (for deposit/discount lines, the printed label)",
-            "quantity": "number (pieces, or kg for weighed goods); 1 if no quantity is printed",
+            "quantity": "number, how many times the product was bought, only when printed as a multi-buy (e.g. '2 x 12,00' or '2 STK à 12,00') or as a weight in kg for weighed goods; a count or size inside the product name (e.g. '4STK', '1KG', '150 G') is part of the name, so use 1",
             "unit_price": "number, only if a per-unit price is printed on the receipt, otherwise null",
             "total_price": "number in DKK as printed (negative for kind=discount), or null if unreadable"
         }
     ],
-    "subtotal": "number, only if a subtotal is printed before discount/total, otherwise null",
-    "discount": "number, positive, only if a total discount amount is printed, otherwise null",
     "moms": "number, the VAT amount in DKK as printed (not the percentage), or null",
     "total": "number, the final amount paid as printed, or null if unreadable",
     "payment_method": f"exactly one of: {' | '.join(PAYMENT_METHODS)}, or null if not printed",
@@ -57,6 +55,8 @@ SCHEMA_EXAMPLE = {
 # Same shape as SCHEMA_EXAMPLE, as types. Receipt.model_json_schema() is passed to
 # Ollama as format=, so the model can only emit these fields and vocabulary values.
 # Categories are not extracted from the image; categorize.py adds them afterwards.
+# subtotal and discount aren't extracted either: postprocess.derive_totals() computes
+# them from the lines, because the model copied TOTAL into them instead of null.
 class LineItem(BaseModel):
     raw_text: str
     kind: LineKind
@@ -69,8 +69,6 @@ class LineItem(BaseModel):
 class Receipt(BaseModel):
     vendor: str | None
     line_items: list[LineItem]
-    subtotal: float | None
-    discount: float | None
     moms: float | None
     total: float | None
     payment_method: PaymentMethod | None

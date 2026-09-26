@@ -14,7 +14,7 @@ Output schema (values below describe the expected type/content, not literal outp
 
 What goes in "line_items":
 - Only the purchased products and the discount/deposit lines between them, in printed order. Products are kind "item", PANT lines are kind "deposit", and any line containing RAB/RABAT (e.g. "Aftenrabat") is kind "discount".
-- Stop at the TOTAL line. TOTAL, SUBTOTAL, the payment line (e.g. BETALINGSKORT, KREDITKORT, KONTANT, MOBILEPAY), BYTTEPENGE and MOMS lines are NOT line items. They only fill the top-level fields "total", "subtotal", "payment_method" and "moms".
+- Stop at the TOTAL line. TOTAL, SUBTOTAL, the payment line (e.g. BETALINGSKORT, KREDITKORT, KONTANT, MOBILEPAY), BYTTEPENGE and MOMS lines are NOT line items. They only fill the top-level fields "total", "payment_method" and "moms".
 
 Danish receipt conventions to know:
 - Decimal separator is a comma, not a period (e.g. "24,95" means 24.95). Convert to standard numeric format (period as decimal separator) in your output.
@@ -24,7 +24,7 @@ Danish receipt conventions to know:
   - "U/" = "uden" (without)
   - "UDL." = "udenlandsk" (foreign, e.g. a foreign transaction or foreign goods)
   - "ØKO" = "økologisk" (organic)
-  - "STK" = "stykker" (pieces/units)
+  - "STK" = "stykker" (pieces). Inside a product name (e.g. "BANAN 4STK") it is the pack size, not the quantity bought.
   - "RAB" or "RABAT" = "rabat" (discount)
   - "PANT" = bottle/can deposit
   - "MOMS" = Danish VAT
@@ -33,7 +33,6 @@ Danish receipt conventions to know:
 Rules for values:
 - Never calculate values yourself (no summing, no deriving unit_price or moms). Copy only what is printed; otherwise use null.
 - "unit_price" is null unless a separate per-unit price is printed (e.g. "2 STK à 12,00"). Do not copy the line's total into it.
-- "subtotal" is null unless a line labelled SUBTOTAL is printed. Do not copy TOTAL into it.
-- "discount" is null unless a total discount amount is printed (e.g. "RABAT I ALT"). Do not copy moms or a single discount line into it.
+- "quantity" is 1 unless a multi-buy or weight is printed; a pack size in the product name does not count.
 - Do not guess numeric values you cannot read clearly. Use null and flag it in "uncertain_fields" instead of fabricating a plausible-looking number.
 """

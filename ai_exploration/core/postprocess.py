@@ -2,6 +2,7 @@
 
 clean() drops lines the model wrongly emits as line items (TOTAL, payment, MOMS...)
 and nulls unit prices that merely repeat the line total.
+derive_totals() computes subtotal and discount from the lines: the model reads, code calculates.
 check() flags inconsistencies for human review; it never changes numbers.
 """
 import copy
@@ -15,6 +16,9 @@ NON_ITEM_PREFIXES = (
     "DANKORT", "KONTANT", "MOBILEPAY", "BYTTEPENGE", "RABAT I ALT",
 )
 LINE_PATH = re.compile(r"^line_items\[(\d+)\](.*)$")
+# A printed multi-buy or weight, e.g. "2 X 12,00", "2 STK À 12,00", "0,532 KG X 29,95" (upper-cased).
+# A count or size in the name alone ("BANAN 4STK", "1KG") is a pack size, not a quantity.
+MULTI_BUY = re.compile(r"\d+\s*(?:STK|KG)?\s*[XÀ@]\s*\d")
 
 MONEY_TOLERANCE = 0.01
 # Danish VAT is 25% on the net amount, i.e. 20% of the gross total.
@@ -56,6 +60,18 @@ def clean(receipt: dict) -> tuple[dict, list[str]]:
     return receipt, dropped
 
 
+def derive_totals(receipt: dict) -> dict:
+    """Return a copy with subtotal (items + deposits) and discount (positive) summed from the lines.
+
+    Unreadable line amounts (null) count as 0 here; check() reports them separately.
+    """
+    receipt = copy.deepcopy(receipt)
+    items = receipt["line_items"]
+    receipt["subtotal"] = round(sum((i["total_price"] or 0 for i in items if i["kind"] != "discount"), 0.0), 2)
+    receipt["discount"] = round(sum((-(i["total_price"] or 0) for i in items if i["kind"] == "discount"), 0.0), 2)
+    return receipt
+
+
 def check(receipt: dict) -> list[str]:
     """Return human-readable warnings; empty means every check passed."""
     warnings = []
@@ -65,16 +81,17 @@ def check(receipt: dict) -> list[str]:
     unreadable = [i for i, item in enumerate(items) if item["total_price"] is None]
     if unreadable:
         warnings.append(f"line_items {unreadable} have no total_price; sum check is incomplete")
+    # Also the check that subtotal - discount == total, since derive_totals() splits this same sum.
     line_sum = round(sum(item["total_price"] or 0 for item in items), 2)
     if total is None:
         warnings.append("total is missing")
     elif abs(line_sum - total) > MONEY_TOLERANCE:
         warnings.append(f"line items sum to {line_sum}, printed total is {total}")
 
-    discount = receipt.get("discount")
-    discount_lines = round(-sum(item["total_price"] or 0 for item in items if item["kind"] == "discount"), 2)
-    if discount is not None and abs(discount - discount_lines) > MONEY_TOLERANCE:
-        warnings.append(f"discount is {discount}, discount lines add up to {discount_lines}")
+    # quantity > 1 with no multi-buy printed on the line is usually a pack size read as a count ("BANAN 4STK").
+    for i, item in enumerate(items):
+        if item["quantity"] != 1 and not MULTI_BUY.search(item["raw_text"].upper()):
+            warnings.append(f"line_items[{i}] quantity {item['quantity']} but no multi-buy printed in {item['raw_text']!r}")
 
     moms = receipt.get("moms")
     if moms is not None and total is not None and abs(moms - total * MOMS_SHARE) > MOMS_TOLERANCE:

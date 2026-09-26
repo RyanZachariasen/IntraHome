@@ -1,7 +1,8 @@
 """Run one extractor + one categorizer on one receipt image and save the result under runs/.
 
 Pipeline: extract (image -> raw receipt) -> clean (drop non-item lines)
--> categorize (text-only pass) -> check (flag inconsistencies).
+-> derive_totals (subtotal/discount from the lines) -> categorize (text-only pass)
+-> check (flag inconsistencies).
 
     python run.py --extractor ollama_qwen --image data/receipts/IMG_8680.jpg
     python run.py --extractor ollama_qwen --categorizer ollama_qwen --image data/receipts/IMG_8680.jpg
@@ -36,6 +37,7 @@ def main() -> None:
     if result.parsed is not None:
         cleaned, dropped = postprocess.clean(result.parsed)
         print(f"Dropped non-item lines: {dropped or 'none'}")
+        cleaned = postprocess.derive_totals(cleaned)
         print("Categorizing...")
         final, categorizer_meta = categorizer.categorize(cleaned)
         checks = postprocess.check(final)

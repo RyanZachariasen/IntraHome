@@ -110,8 +110,8 @@
       "category": "other"
     }
   ],
-  "subtotal": null,
-  "discount": null,
+  "subtotal": 84.95,
+  "discount": 19.0,
   "moms": 13.19,
   "total": 65.95,
   "payment_method": "card",
